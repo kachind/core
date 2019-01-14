@@ -43,7 +43,7 @@ $NIMIQ_VERSION
 }
 _EOF_
 
-cp ../dist/{nimiq.js,nimiq.js.map,VERSION,web-babel.js,web-babel.js.map,web.js,web.js.map,web-offline.js,web-offline.js.map,worker.js,worker-js.js,worker.js.map,worker-wasm.js,worker-wasm.wasm} npm/
+cp ../dist/{namespace.d.ts,nimiq.js,nimiq.js.map,types.d.ts,VERSION,web-babel.js,web-babel.js.map,web.js,web.js.map,web-offline.js,web-offline.js.map,worker.js,worker-js.js,worker.js.map,worker-wasm.js,worker-wasm.wasm} npm/
 cd npm
 
 echo "
