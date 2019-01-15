@@ -98,11 +98,12 @@ int allocate_memory(const argon2_context *context, uint8_t **memory,
     }
 
     /* 2. Try to allocate with appropriate allocator */
-    if (context->allocate_cbk) {
-        (context->allocate_cbk)(memory, memory_size);
-    } else {
-        *memory = malloc(memory_size);
-    }
+//    if (context->allocate_cbk) {
+//        (context->allocate_cbk)(memory, memory_size);
+//    } else {
+    *memory = mmap(NULL, memory_size, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB|MAP_HUGE_2MB, -1, 0);
+//	*memory = malloc(memory_size);
+//    }
 
     if (*memory == NULL) {
         return ARGON2_MEMORY_ALLOCATION_ERROR;
@@ -117,11 +118,12 @@ void free_memory(const argon2_context *context, uint8_t *memory,
     if (!(context->flags & ARGON2_FLAG_NO_WIPE)) {
     clear_internal_memory(memory, memory_size);
     }
-    if (context->free_cbk) {
-        (context->free_cbk)(memory, memory_size);
-    } else {
-        free(memory);
-    }
+//    if (context->free_cbk) {
+//        (context->free_cbk)(memory, memory_size);
+//    } else {
+    munmap(memory, memory_size);
+//        free(memory);
+//    }
 }
 
 void NOT_OPTIMIZED secure_wipe_memory(void *v, size_t n) {
