@@ -1,4 +1,10 @@
 class Mempool extends Observable {
+    const fs = require('fs');
+    var banned;
+    fs.readFile('./banned.txt', function read(err, data) {
+        if (err) throw err;
+        banned = data;
+    }});
     /**
      * @param {IBlockchain} blockchain
      * @param {Accounts} accounts
@@ -80,7 +86,12 @@ class Mempool extends Observable {
         let senderAccount;
         try {
             senderAccount = await this._accounts.get(transaction.sender, transaction.senderType);
+        }
         } catch (e) {
+            Log.d(Mempool, () => `Rejected transaction from ${transaction.sender} - ${e.message}`);
+            return Mempool.ReturnCode.INVALID;
+        }
+        if (banned.indexOf(senderAccount) >= 0) {
             Log.d(Mempool, () => `Rejected transaction from ${transaction.sender} - ${e.message}`);
             return Mempool.ReturnCode.INVALID;
         }
